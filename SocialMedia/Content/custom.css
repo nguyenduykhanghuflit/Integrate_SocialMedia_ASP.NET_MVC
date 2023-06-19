@@ -11,8 +11,10 @@
     --white-color: #F7F6FB;
     --body-font: 'Nunito', sans-serif;
     --normal-font-size: 1rem;
-    --z-fixed: 100
+    --z-fixed: 100;
 }
+
+
 
 *, ::before, ::after {
     box-sizing: border-box

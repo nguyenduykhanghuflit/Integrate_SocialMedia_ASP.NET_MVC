@@ -29,6 +29,7 @@ namespace SocialMedia
 
             bundles.Add(new StyleBundle("~/style/custom").Include("~/Content/custom.css"));
             bundles.Add(new StyleBundle("~/style/login").Include("~/Content/login.css"));
+            bundles.Add(new StyleBundle("~/style/instagram").Include("~/Content/instagram.css"));
 
             bundles.Add(new ScriptBundle("~/script/sidebar").Include(
                       "~/Scripts/sidebar.js"));
