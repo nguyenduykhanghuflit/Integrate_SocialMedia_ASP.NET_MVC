@@ -1,0 +1,68 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+    </style>
+    @Styles.Render("~/style/login")
+</head>
+<body>
+
+    <!-- Facebook plugin start -->
+    <script>
+
+
+        //client login->nhận token-> fb lưu vào session và kiểm tra giúp
+        function handleLogin() {
+            FB.login(function (response) {
+                if (response.status === 'connected') {
+                    const access_token = response.authResponse.accessToken;
+                    //nếu client không gửi accesstoken xuống thì cho dù có redirect qua trang khác thì vẫn sẽ nhảy về đây
+                    window.location.href = "/FacebookAuth/LoginFacebookSucces?access_token=" + access_token
+                }
+                else {
+                    alert("Đã xảy ra lỗi")
+                }
+            }, { scope: 'public_profile,email' });
+        }
+
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: 280910524463703,
+                cookie: true,                     // Enable cookies to allow the server to access the session.
+                xfbml: true,                     // Parse social plugins on this webpage.
+                version: 'v17.0'           // Use this Graph API version for this call.
+            });
+
+        };
+
+
+
+
+    </script>
+    <!-- Facebook plugin end -->
+
+    <div class="container">
+        <span id="btn-login-facebook" onclick="handleLogin();" class="fb btn text-center">
+            <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+        </span>
+    </div>
+
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js"></script>
+</body>
+</html>
+
