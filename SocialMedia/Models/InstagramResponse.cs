@@ -5,6 +5,7 @@ using System.Web;
 
 namespace SocialMedia.Models
 {
+    #region Instagram Info
 
     public class Business
     {
@@ -42,8 +43,10 @@ namespace SocialMedia.Models
         public string id { get; set; }
     }
 
+    #endregion
 
 
+    #region Instagram Profile
     public class Datum
     {
         public string id { get; set; }
@@ -54,7 +57,6 @@ namespace SocialMedia.Models
         public List<Datum> data { get; set; }
         public Paging paging { get; set; }
     }
-
 
 
     public class InstagramProfile
@@ -71,6 +73,58 @@ namespace SocialMedia.Models
         public long ig_id { get; set; }
         public string id { get; set; }
     }
+    #endregion
 
 
+    #region Instagram Media Detail
+    public class Comments
+    {
+        public List<CommentItem> data { get; set; }
+    }
+    public class Replies
+    {
+        public List<CommentItem> data { get; set; }
+    }
+
+    public class CommentItem
+    {
+        public From from { get; set; }
+        public int like_count { get; set; }
+        public string text { get; set; }
+        public DateTime timestamp { get; set; }
+        public string username { get; set; }
+        public string id { get; set; }
+        public User user { get; set; }
+        public Replies Replies { get; set; }
+
+    }
+
+    public class From
+    {
+        public string id { get; set; }
+        public string username { get; set; }
+    }
+
+    public class InstagramMedia
+    {
+        public string caption { get; set; }
+        public int comments_count { get; set; }
+        public string id { get; set; }
+        public bool is_comment_enabled { get; set; }
+        public int like_count { get; set; }
+        public string media_product_type { get; set; }
+        public string media_type { get; set; }
+        public string media_url { get; set; }
+        public DateTime timestamp { get; set; }
+        public string shortcode { get; set; }
+        public string username { get; set; }
+        public Comments comments { get; set; }
+
+    }
+
+    public class User
+    {
+        public string id { get; set; }
+    }
+    #endregion
 }

@@ -69,9 +69,9 @@ namespace SocialMedia.Services
         {
             FacebookRequest facebookRequest = new FacebookRequest();
             var url = fbUrl + id +
-               "?fields=caption,comments_count,id,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,thumbnail_url,timestamp,shortcode,username,comments{from,like_count,text,timestamp,user,username,replies},children&access_token="
+               "?fields=caption,comments_count,id,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,thumbnail_url,timestamp,shortcode,username,comments{from,like_count,text,timestamp,user,username,replies{user,username,from,like_count,text,timestamp},media,id,hidden,parent_id},children,owner&access_token="
                + AccessToken;
-            return await facebookRequest.Get<dynamic>(url);
+            return await facebookRequest.Get<InstagramMedia>(url);
 
         }
 

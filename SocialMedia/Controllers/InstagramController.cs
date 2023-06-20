@@ -12,9 +12,9 @@ namespace SocialMedia.Controllers
 {
     public class InstagramController : Controller
     {
-        // GET: Instagram
 
-        FacebookRequest facebookRequest = new FacebookRequest();
+
+        readonly FacebookRequest facebookRequest = new FacebookRequest();
 
         public async Task<ActionResult> Index()
         {
@@ -30,18 +30,77 @@ namespace SocialMedia.Controllers
             if (profile is FacebookError facebookErr)
             {
                 ViewBag.Error = facebookErr.error.message;
+                return View();
             }
             else if (profile is ErrorResponse errorResponse)
             {
                 ViewBag.Error = errorResponse.Message;
+                return View();
             }
             else
             {
-                ViewBag.Data = (InstagramProfile)profile;
+                var insProfileData = (InstagramProfile)profile;
+                Session["Name"] = insProfileData.username;
+                Session["Avt"] = insProfileData.profile_picture_url;
+                ViewBag.Data = insProfileData;
+                List<InstagramMedia> instagramMedias = new List<InstagramMedia>();
+                var media = insProfileData.media.data;
+
+                for (int i = 0; i < media.Count; i++)
+                {
+                    var insMediaRes = await instagramService.GetMediaDetail(media[i].id);
+
+                    if (insMediaRes is InstagramMedia insMediaData)
+                    {
+
+                        instagramMedias.Add(insMediaData);
+                    }
+                }
+
+                ViewBag.Media = instagramMedias;
+                return View();
             }
 
-            return View();
+
         }
+
+
+        public async Task<ActionResult> Media(string id)
+        {
+            var accessToken = Session["AccessToken"];
+            if (accessToken == null || await facebookRequest.AccessTokenValid(accessToken.ToString()) == false)
+            {
+                return RedirectToAction("Login", "FacebookAuth");
+            }
+            InstagramService instagramService = new InstagramService(accessToken.ToString());
+
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Instagram");
+            }
+            var insMediaRes = await instagramService.GetMediaDetail(id);
+
+            if (insMediaRes is FacebookError facebookErr)
+            {
+                ViewBag.Error = facebookErr.error.message;
+                return View();
+            }
+            else if (insMediaRes is ErrorResponse errorResponse)
+            {
+                ViewBag.Error = errorResponse.Message;
+                return View();
+            }
+            else
+            {
+                var insMediaData = (InstagramMedia)insMediaRes;
+                ViewBag.Data = insMediaData;
+                return View();
+            }
+
+
+        }
+
+
 
         public async Task<JsonResult> Test()
         {
@@ -52,7 +111,7 @@ namespace SocialMedia.Controllers
             }
             InstagramService instagramService = new InstagramService(accessToken.ToString());
 
-            var me = await instagramService.GetMediaDetail("17996583520821414");
+            object me = await instagramService.GetMediaDetail("17996583520821414");
             return Json(me, JsonRequestBehavior.AllowGet);
 
         }
