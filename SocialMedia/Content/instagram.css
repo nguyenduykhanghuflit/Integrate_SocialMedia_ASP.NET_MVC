@@ -65,6 +65,7 @@ img {
 }
 
     .profile-image img {
+        width: 200px;
         border-radius: 50%;
     }
 
@@ -204,7 +205,7 @@ img {
 
 /* Media Query */
 
-@media screen and (max-width: 40rem) {
+@media screen and (max-width: 400px) {
     .profile {
         display: flex;
         flex-wrap: wrap;
@@ -345,6 +346,10 @@ img {
             margin: 0;
         }
     }
+}
+
+ul {
+    padding: 0;
 }
 
 /* Loader Animation */

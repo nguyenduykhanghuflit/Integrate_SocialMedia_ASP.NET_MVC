@@ -1,0 +1,172 @@
+﻿@using SocialMedia.Models
+@{
+    ViewBag.Title = "Media";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+<style>
+    .circle_avatar {
+        vertical-align: middle;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid #4cff00;
+    }
+    .circle_avatar-30 {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #4cff00;
+    }
+    pre {
+        white-space: pre-wrap;
+        word-break: keep-all;
+        text-align:left;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .font-weight-bold {
+        font-weight: bold;
+    }
+    .ins_time {
+        font-size: 12px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-style: italic;
+    }
+
+    .comment-box::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .comment-box::-webkit-scrollbar-thumb {
+        background-color: #f66c6c;
+    }
+
+    .comment-box::-webkit-scrollbar-track {
+        background-color: #ccc;
+    }
+
+</style>
+
+
+@if (ViewBag.Error != null)
+{
+
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+else
+{
+    InstagramMedia data = (InstagramMedia)ViewBag.Data;
+
+
+
+<div class="container-fluid p-3">
+
+    <div class="row gap-md-1">
+        <div class="col-md-6  col-lg-6 col-xl-6 col-xxl-6 col-sm-12  col-xs-12">
+            @if (data.media_type == "VIDEO")
+            {
+                <video onmouseover="this.play()"  controls class="img_detail w-100" alt="">
+                    <source src="@data.media_url">
+                </video>
+            }
+            @if (data.media_type == "IMAGE")
+            {
+                <img class="img_detail w-100" src="@data.media_url" alt="" />
+            }
+
+        </div>
+        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5 col-sm-12 col-xs-12 p-2 ">
+            <div class="media_detail">
+                <div class="detail_header">
+                    <div class="ins_info d-flex align-items-center">
+                        <img class="circle_avatar" src="@Session["Avt"]" />
+                        <div class="ins_info_name font-weight-bold p-1">@Session["Name"]</div>
+                    </div>
+
+                    <div class="ins_time mt-1">@data.timestamp</div>
+                    <hr />
+                    <div class="ins_caption">
+                        <pre>@data.caption.Trim(); </pre>
+
+                    </div>
+                </div>
+                <div style="color:#f22d2d;" class="detail_reaction d-flex gap-3">
+                    <div style="font-size: 17px;"><i class="fas fa-heart"></i> @data.like_count</div>
+                    <div style="font-size: 17px;"><i class="fas fa-comment"></i> @data.comments_count</div>
+                </div>
+                <hr />  
+                <div class="detail-comment">
+                    <div class="input-group mb-3 comment_media">
+                        <input type="text" class="form-control" data-media="@data.id" name="input_comment_media" placeholder="Bình luận..." aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="button"><i class='bx bx-send'></i></button>
+                        </div>
+                    </div>
+                    <div style="height:400px; overflow:auto;" class="comment-box">
+
+
+                        @if (data.comments!=null&&data.comments.data.Count > 0)
+                        {
+
+                            foreach (var cmt in data.comments.data)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
+                                    <div class="p-0">
+                                        <div style="font-size:14px" class="font-weight-bold p-1">@cmt.username</div>
+                                        <div style="font-size:12px;font-style:italic">@cmt.timestamp</div>
+                                    </div>
+                                </div>
+                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">@cmt.text</div>
+
+
+                                    <!--<div style="color: #f22d2d; padding-left: 40px;" class="detail_reaction d-flex gap-3">-->
+                                    @*<div style="font-size: 12px;"><i class="fas fa-heart"></i> @data.like_count</div>*@
+                                    @*  <div style="font-size: 12px;cursor:pointer"><i class="fas fa-comment"></i> Trả lời</div>*@
+                                      <!--</div>-->
+
+
+                    <div class="p-3">
+
+                        @if (cmt.Replies!=null && cmt.Replies.data.Count > 0 )
+                        {
+                            foreach (var rep in cmt.Replies.data)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
+                                    <div class="p-0">
+                                        <div style="font-size:14px" class="font-weight-bold p-1">@rep.username</div>
+                                        <div style="font-size:12px;font-style:italic">@rep.timestamp</div>
+                                    </div>
+                                </div>
+                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">@rep.text</div>
+                            }
+                        }
+
+                    </div>
+                                <hr />
+                            }
+                        }
+
+                    </div>
+                </div>
+
+
+            </div>
+            <!--AVT, username, caption, action-->
+            <!--Like count, comment count-->
+            <!--Commnent detail, reply comment,-->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+}
+
+

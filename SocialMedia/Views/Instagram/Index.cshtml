@@ -1,4 +1,4 @@
-﻿
+﻿@using SocialMedia.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,284 +14,109 @@
     }
     else
     {
-<div class="body_ins">
-    <header>
-        <div class="container">
-            <div class="profile">
 
-                <div class="profile-image">
+        var media = (List<InstagramMedia>)ViewBag.Media;
+        <div class="body_ins">
+            <header>
+                <div class="container">
+                    <div class="profile">
 
-                    <img width="200" height="200" src="@ViewBag.Data.profile_picture_url" alt="">
+                        <div class="profile-image">
 
+                            <img width="200" height="200" src="@ViewBag.Data.profile_picture_url" alt="">
+
+                        </div>
+
+                        <div class="profile-user-settings">
+
+                            <h1 class="profile-user-name">@ViewBag.Data.username</h1>
+
+                            <button  class="btn profile-edit-btn">Tạo bài viết</button>
+
+
+
+                        </div>
+
+                        <div class="profile-stats">
+
+                            <ul>
+                                <li><span class="profile-stat-count">@ViewBag.Data.media_count</span> Media</li>
+                                <li><span class="profile-stat-count">@ViewBag.Data.followers_count</span> Theo dõi</li>
+                                <li><span class="profile-stat-count">@ViewBag.Data.follows_count</span> Đang theo dõi</li>
+                            </ul>
+
+                        </div>
+
+                        <div class="profile-bio">
+
+                            <p><span class="profile-real-name">@ViewBag.Data.biography</span></p>
+
+                        </div>
+
+                    </div>
+                    <!-- End of profile section -->
                 </div>
 
-                <div class="profile-user-settings">
+                <!-- End of container -->
 
-                    <h1 class="profile-user-name">@ViewBag.Data.username</h1>
+            </header>
 
-                    <button class="btn profile-edit-btn">View in Ins</button>
+            <main>
 
-                  
+                <div class="container">
+                    <div class="gallery">
 
-                </div>
+                        @foreach (var item in media)
+                        {
 
-                <div class="profile-stats">
+                            if (item.media_type == "VIDEO")
+                            {
+                                <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
+                                    <video id="video_@item.id" controls  class="gallery-image" alt="">
+                                        <source src="@item.media_url">
+                                    </video>
+                                        <div onmouseover="handleAutoPlay(video_@item.id);" onmouseout="handlePasue(video_@item.id);" class="gallery-item-info">
+                                            <ul>
+                                                <li class="gallery-item-likes"><span class="visually-hidden">Likes: </span><i class="fas fa-heart" aria-hidden="true"></i> @item.like_count</li>
+                                                <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>  @item.comments_count</li>
+                                            </ul>
 
-                    <ul>
-                        <li><span class="profile-stat-count">@ViewBag.Data.media_count</span> Media</li>
-                        <li><span class="profile-stat-count">@ViewBag.Data.followers_count</span> Theo dõi</li>
-                        <li><span class="profile-stat-count">@ViewBag.Data.follows_count</span> Đang theo dõi</li>
-                    </ul>
+                                        </div>
+                                </div>
+                            
+                            }
 
-                </div>
+                            if (item.media_type == "IMAGE")
+                            {
+                          
+                            <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
+                                <img src="@item.media_url" class="gallery-image" alt="">
+                                <div class="gallery-item-info">
 
-                <div class="profile-bio">
+                                    <ul>
+                                        <li class="gallery-item-likes"><span class="visually-hidden">Likes: </span><i class="fas fa-heart" aria-hidden="true"></i> @item.like_count</li>
+                                        <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>  @item.comments_count</li>
+                                        
+                                    </ul>
 
-                    <p><span class="profile-real-name">@ViewBag.Data.biography</span></p>
+                                </div>
+                            </div>
 
-                </div>
+                            }
 
-            </div>
-            <!-- End of profile section -->
+
+                        }
+
+                    </div>
+                     <!-- End of gallery -->
+
+                     @*<div class="loader"></div>*@
+
+                 </div>
+                <!-- End of container -->
+
+            </main>
         </div>
-
-        <!-- End of container -->
-
-    </header>
-
-    <main>
-
-        <div class="container">
-            <div class="gallery">
-
-                <div class="gallery-item" tabindex="0">
-
-                  @*  <img src="https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop" class="gallery-image" alt="">*@
-                    <video controls class="gallery-image" alt="">
-                        <source src="https://scontent.cdninstagram.com/o1/v/t16/f1/m82/A940196786A4F2270BC7CF7F53192387_video_dashinit.mp4?efg=eyJ2ZW5jb2RlX3RhZyI6InZ0c192b2RfdXJsZ2VuLjM2MC5jbGlwcyJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=102&vs=951471539509446_1514633601&_nc_vs=HBksFQIYT2lnX3hwdl9yZWVsc19wZXJtYW5lbnRfcHJvZC9BOTQwMTk2Nzg2QTRGMjI3MEJDN0NGN0Y1MzE5MjM4N192aWRlb19kYXNoaW5pdC5tcDQVAALIAQAVABgkR0ZvU0VCWGdPOWtIazVvQUFEQkQybTg3WkljeWJxX0VBQUFGFQICyAEAKAAYABsBiAd1c2Vfb2lsATEVAAAmsPiEnejB6kAVAigCQzMsF0AprpeNT987GBJkYXNoX2Jhc2VsaW5lXzFfdjERAHUAAA%3D%3D&ccb=9-4&oh=00_AfA60x-oxN2lVcHdYZ3m3GS9YLE4xVBkoCDUIPP12F_JRw&oe=64922523&_nc_sid=c07a80&_nc_rid=080af94a83">
-                    </video>
-                    @*<div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
-                        </ul>
-
-                    </div>*@
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1497445462247-4330a224fdb1?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 89</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 5</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 42</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1502630859934-b3b41d18206c?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Video</span><i class="fas fa-video" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 38</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1498471731312-b6d2b8280c61?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 47</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1515023115689-589c33041d3c?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 94</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 3</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 52</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 4</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1515814472071-4d632dbc5d4a?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 66</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1511407397940-d57f68e81203?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 45</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1518481612222-68bbe828ecd1?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 34</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1505058707965-09a4469a87e4?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 41</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="gallery-item" tabindex="0">
-
-                    <img src="https://images.unsplash.com/photo-1423012373122-fff0a5d28cc9?w=500&h=500&fit=crop" class="gallery-image" alt="">
-
-                    <div class="gallery-item-type">
-
-                        <span class="visually-hidden">Video</span><i class="fas fa-video" aria-hidden="true"></i>
-
-                    </div>
-
-                    <div class="gallery-item-info">
-
-                        <ul>
-                            <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 30</li>
-                            <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-            </div>
-            <!-- End of gallery -->
-
-@*            <div class="loader"></div>*@
-
-        </div>
-        <!-- End of container -->
-
-    </main>
-</div>
 
 
 
@@ -299,3 +124,13 @@
 }
 
 
+<script>
+  
+
+    function handleAutoPlay(el) {
+        el.play();
+    }
+    function handlePasue(el) {
+        el.pause();
+    }
+</script>
