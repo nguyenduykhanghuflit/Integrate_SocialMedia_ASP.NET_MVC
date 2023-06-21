@@ -4,6 +4,7 @@ using SocialMedia.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,7 +13,6 @@ namespace SocialMedia.Controllers
 {
     public class InstagramController : Controller
     {
-
 
         readonly FacebookRequest facebookRequest = new FacebookRequest();
 
@@ -34,7 +34,7 @@ namespace SocialMedia.Controllers
             }
             else if (profile is ErrorResponse errorResponse)
             {
-                ViewBag.Error = errorResponse.Message;
+                ViewBag.Error = errorResponse.error.message;
                 return View();
             }
             else
@@ -43,6 +43,8 @@ namespace SocialMedia.Controllers
                 Session["Name"] = insProfileData.username;
                 Session["Avt"] = insProfileData.profile_picture_url;
                 ViewBag.Data = insProfileData;
+
+                //todo: use api to get comments
                 List<InstagramMedia> instagramMedias = new List<InstagramMedia>();
                 var media = insProfileData.media.data;
 
@@ -58,6 +60,9 @@ namespace SocialMedia.Controllers
                 }
 
                 ViewBag.Media = instagramMedias;
+
+
+
                 return View();
             }
 
@@ -87,7 +92,7 @@ namespace SocialMedia.Controllers
             }
             else if (insMediaRes is ErrorResponse errorResponse)
             {
-                ViewBag.Error = errorResponse.Message;
+                ViewBag.Error = errorResponse.error.message;
                 return View();
             }
             else
@@ -100,6 +105,71 @@ namespace SocialMedia.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetMediaComment(string ig_media_id)
+        {
+            var accessToken = Session["AccessToken"];
+            if (accessToken == null || await facebookRequest.AccessTokenValid(accessToken.ToString()) == false)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "Unauthorized");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            if (ig_media_id == null)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "ig_media_id is require");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            InstagramService instagramService = new InstagramService(accessToken.ToString());
+            var data = await instagramService.GetMediaComment(ig_media_id);
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCommentReply(string ig_comment_id)
+        {
+            var accessToken = Session["AccessToken"];
+            if (accessToken == null || await facebookRequest.AccessTokenValid(accessToken.ToString()) == false)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "Unauthorized");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            if (ig_comment_id == null)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "ig_media_id is require");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            InstagramService instagramService = new InstagramService(accessToken.ToString());
+            var data = await instagramService.GetCommentReply(ig_comment_id);
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateComment(string id, string message, CommentType commentType)
+        {
+
+            var accessToken = Session["AccessToken"];
+            if (accessToken == null || await facebookRequest.AccessTokenValid(accessToken.ToString()) == false)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "Unauthorized");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            if (id == null || message == null)
+            {
+                ErrorResponse error = new ErrorResponse(-1, "missing data");
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
+
+            InstagramService instagramService = new InstagramService(accessToken.ToString());
+            var data = await instagramService.CreateComment(id, message, commentType);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
 
         public async Task<JsonResult> Test()

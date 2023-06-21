@@ -12,6 +12,7 @@
         border-radius: 50%;
         border: 1px solid #4cff00;
     }
+
     .circle_avatar-30 {
         vertical-align: middle;
         width: 30px;
@@ -19,15 +20,18 @@
         border-radius: 50%;
         border: 1px solid #4cff00;
     }
+
     pre {
         white-space: pre-wrap;
         word-break: keep-all;
-        text-align:left;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: left;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .font-weight-bold {
         font-weight: bold;
     }
+
     .ins_time {
         font-size: 12px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +49,22 @@
     .comment-box::-webkit-scrollbar-track {
         background-color: #ccc;
     }
-
+    .detail-comment{
+        position:relative;
+    }
+    .loading-comment {
+        position: absolute;
+        background:rgb(53, 50, 50,.4);
+        width: 100%;
+        height: 100%;
+        z-index:9999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:white;
+        font-size:20px;
+    }
+  
 </style>
 
 
@@ -62,111 +81,274 @@ else
 
 
 
-<div class="container-fluid p-3">
+    <div class="container-fluid p-3">
 
-    <div class="row gap-md-1">
-        <div class="col-md-6  col-lg-6 col-xl-6 col-xxl-6 col-sm-12  col-xs-12">
-            @if (data.media_type == "VIDEO")
-            {
-                <video onmouseover="this.play()"  controls class="img_detail w-100" alt="">
-                    <source src="@data.media_url">
-                </video>
-            }
-            @if (data.media_type == "IMAGE")
-            {
-                <img class="img_detail w-100" src="@data.media_url" alt="" />
-            }
+        <div class="row gap-md-1">
+            <div class="col-md-6  col-lg-6 col-xl-6 col-xxl-6 col-sm-12  col-xs-12">
+                @if (data.media_type == "VIDEO")
+                {
+                    <video onmouseover="this.play()" controls class="img_detail w-100" alt="">
+                        <source src="@data.media_url">
+                    </video>
+                }
+                @if (data.media_type == "IMAGE")
+                {
+                    <img class="img_detail w-100" src="@data.media_url" alt="" />
+                }
 
-        </div>
-        <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5 col-sm-12 col-xs-12 p-2 ">
-            <div class="media_detail">
-                <div class="detail_header">
-                    <div class="ins_info d-flex align-items-center">
-                        <img class="circle_avatar" src="@Session["Avt"]" />
-                        <div class="ins_info_name font-weight-bold p-1">@Session["Name"]</div>
-                    </div>
+            </div>
+            <div class="col-md-5 col-lg-5 col-xl-5 col-xxl-5 col-sm-12 col-xs-12 p-2 ">
+                <div class="media_detail">
+                    <div class="detail_header">
+                        <div class="ins_info d-flex align-items-center">
+                            <img class="circle_avatar" src="@Session["Avt"]" />
+                            <div class="ins_info_name font-weight-bold p-1">@Session["Name"]</div>
+                        </div>
 
-                    <div class="ins_time mt-1">@data.timestamp</div>
-                    <hr />
-                    <div class="ins_caption">
-                        <pre>@data.caption.Trim(); </pre>
+                        <div class="ins_time mt-1">@data.timestamp</div>
+                        <hr />
+                        <div class="ins_caption">
+                            <pre>@data.caption.Trim(); </pre>
 
-                    </div>
-                </div>
-                <div style="color:#f22d2d;" class="detail_reaction d-flex gap-3">
-                    <div style="font-size: 17px;"><i class="fas fa-heart"></i> @data.like_count</div>
-                    <div style="font-size: 17px;"><i class="fas fa-comment"></i> @data.comments_count</div>
-                </div>
-                <hr />  
-                <div class="detail-comment">
-                    <div class="input-group mb-3 comment_media">
-                        <input type="text" class="form-control" data-media="@data.id" name="input_comment_media" placeholder="Bình luận..." aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-primary" type="button"><i class='bx bx-send'></i></button>
                         </div>
                     </div>
-                    <div style="height:400px; overflow:auto;" class="comment-box">
-
-
-                        @if (data.comments!=null&&data.comments.data.Count > 0)
-                        {
-
-                            foreach (var cmt in data.comments.data)
-                            {
-                                <div class="d-flex align-items-center">
-                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
-                                    <div class="p-0">
-                                        <div style="font-size:14px" class="font-weight-bold p-1">@cmt.username</div>
-                                        <div style="font-size:12px;font-style:italic">@cmt.timestamp</div>
-                                    </div>
-                                </div>
-                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">@cmt.text</div>
-
-
-                                    <!--<div style="color: #f22d2d; padding-left: 40px;" class="detail_reaction d-flex gap-3">-->
-                                    @*<div style="font-size: 12px;"><i class="fas fa-heart"></i> @data.like_count</div>*@
-                                    @*  <div style="font-size: 12px;cursor:pointer"><i class="fas fa-comment"></i> Trả lời</div>*@
-                                      <!--</div>-->
-
-
-                    <div class="p-3">
-
-                        @if (cmt.Replies!=null && cmt.Replies.data.Count > 0 )
-                        {
-                            foreach (var rep in cmt.Replies.data)
-                            {
-                                <div class="d-flex align-items-center">
-                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
-                                    <div class="p-0">
-                                        <div style="font-size:14px" class="font-weight-bold p-1">@rep.username</div>
-                                        <div style="font-size:12px;font-style:italic">@rep.timestamp</div>
-                                    </div>
-                                </div>
-                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">@rep.text</div>
-                            }
-                        }
-
+                    <div style="color:#f22d2d;" class="detail_reaction d-flex gap-3">
+                        <div style="font-size: 17px;"><i class="fas fa-heart"></i> @data.like_count</div>
+                        <div style="font-size: 17px;"><i class="fas fa-comment"></i> @data.comments_count</div>
                     </div>
-                                <hr />
-                            }
-                        }
-
+                    <hr />
+                    <div class="detail-comment">
+                        <div class="loading-comment d-none">
+                            <div class="item-loading">Loading .....</div>
+                        </div>
+                        <div class="input-group mb-3 comment_media">
+                            <input type="text" class="form-control" data-media="@data.id" name="input_comment_media" placeholder="Bình luận..." aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" id="btn_create_cmt"  type="button"><i class='bx bx-send'></i></button>
+                            </div>
+                        </div>
+                        <!--Use api load comment-->
+                        <div style="height:400px; overflow:auto;" class="comment-box">
+                        </div>
                     </div>
+
+
                 </div>
 
 
             </div>
-            <!--AVT, username, caption, action-->
-            <!--Like count, comment count-->
-            <!--Commnent detail, reply comment,-->
 
         </div>
 
+
     </div>
 
-
-</div>
-
 }
+
+<script>
+
+    async function loadComment() {
+        try {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const ig_media_id = urlParams.get('id')
+
+            const commentBox = document.querySelector('.comment-box');
+
+            if (!ig_media_id) {
+              return  commentBox.innerHTML = `<h5 class="text-danger">Client Error: Can not load comment</h5>`
+            }
+            else {
+                commentBox.innerHTML = '<span>Đang tải...</span>';
+                const getData = await fetch(`/Instagram/GetMediaComment?ig_media_id=${ig_media_id}`);
+                const res = await getData.json();
+
+                if (res.error) {
+                    return commentBox.innerHTML = `<h5 class="text-danger">Client Error: ${res.error.message}</h5>`
+                }
+             
+                let listCommentHtml = '';
+
+                res?.data?.forEach(item => {
+                    let time = convertDate(item.timestamp);
+                    let replyCount = item.Replies ? item.Replies.data.length : 0;
+                    let commentItemHtml = `
+
+                            <div class="d-flex align-items-center">
+                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
+                                    <div class="p-0">
+                                        <div style="font-size:14px" class="font-weight-bold p-1">${item.username}</div>
+                                        <div style="font-size:12px;font-style:italic">${time}</div>
+                                    </div>
+                                </div>
+                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">${item.text}</div>
+
+
+                                    <div style="color: blue; padding-left: 40px;" class="detail_reaction d-flex gap-3">
+
+                                    <div onclick="loadCommentReply(cmt_reply_${item.id})" style="font-size: 12px;cursor:pointer"><i class="fas fa-reply"></i> Xem phản hồi (${replyCount})</div>
+                                     <div style="font-size: 12px;cursor:pointer"><i class="fas fa-comment"></i> Trả lời</div>
+
+                               </div>
+
+                                 <div class="p-3" id="cmt_reply_${item.id}" data_reply="${item.id}">
+
+                                  </div>
+
+
+
+                                <hr />
+
+
+                    `
+
+                    listCommentHtml += commentItemHtml;
+                })
+
+               return commentBox.innerHTML = listCommentHtml;
+            }
+        }
+        catch (error) {
+            console.log(`::::Error:->>>`)
+            console.log(error)
+        }
+    }
+
+    async function loadCommentReply(element) {
+        try {
+
+            if (element.classList.contains('show')) {
+                element.classList.remove('show')
+                element.innerHTML = '';
+            }
+            else {
+                element.classList.add('show')
+                const ig_comment_id = element.getAttribute("data_reply")
+                if (!ig_comment_id) {
+                    return element.innerHTML = `<h5 class="text-danger">Client Error: Can not load comment</h5>`
+                }
+                else {
+                    element.innerHTML = '<span>Đang tải...</span>';
+                    const getData = await fetch(`/Instagram/GetCommentReply?ig_comment_id=${ig_comment_id}`);
+                    const res = await getData.json();
+
+                    if (res.error) {
+                        return element.innerHTML = `<h5 class="text-danger">Client Error: ${res.error.message}</h5>`
+                    }
+                  
+                    let listCommentHtml = '';
+                    if (res.data.length == 0) return element.innerHTML = '<span>Không có phản hồi nào</span>';
+                    res?.data?.forEach(item => {
+                        let time = convertDate(item.timestamp);
+                        let commentItemHtml = `
+
+                           <div class="d-flex align-items-center">
+                            <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
+                            <div class="p-0">
+                                <div style="font-size:14px" class="font-weight-bold p-1">${item.username}</div>
+                                <div style="font-size:12px;font-style:italic">${time}</div>
+                            </div>
+                        </div>
+                        <div style="padding-left:40px;font-size:13px" class="cmt_mess">${item.text}</div>
+
+                    `
+
+                        listCommentHtml += commentItemHtml;
+                    })
+
+                    element.innerHTML = listCommentHtml;
+                }
+
+
+            }
+         
+        }
+        catch (error) {
+            console.log(`::::Error:->>>`)
+            console.log(error)
+        }
+    }
+
+    async function createComment(commentType) {
+
+        document.querySelector('.loading-comment').classList.remove('d-none');
+
+        if (commentType == 'Comments') {
+            const value = document.getElementsByName('input_comment_media')[0].value;
+            const idMedia = document.getElementsByName('input_comment_media')[0].getAttribute("data-media")
+        
+            const data = await fetch(`/instagram/CreateComment?id=${idMedia}&message=${value}&commentType=${commentType}`, { method: "POST" })
+            const res = await data.json();
+            if (res.error) {
+                return alert(`${res.error.message}`);
+            }
+            else {
+                document.getElementsByName('input_comment_media')[0].value = "";
+                const commentBox = document.querySelector('.comment-box');
+                let commentItemHtml = `
+
+                            <div class="d-flex align-items-center">
+                                    <div class="avt-cmt"> <img class="circle_avatar" src="https://t.ctcdn.com.br/eXQweorgzzB_ARsw7I9Bvp4O_Qg=/400x400/smart/filters:format(webp)/i489927.jpeg" /></div>
+                                    <div class="p-0">
+                                        <div style="font-size:14px" class="font-weight-bold p-1">nquyen.duy.khanq</div>
+                                        <div style="font-size:12px;font-style:italic">1 giây trước</div>
+                                    </div>
+                                </div>
+                                <div style="padding-left:40px;font-size:13px" class="cmt_mess">${value}</div>
+
+
+                                    <div style="color: blue; padding-left: 40px;" class="detail_reaction d-flex gap-3">
+
+                                    <div onclick="loadCommentReply(cmt_reply_${res.id})" style="font-size: 12px;cursor:pointer"><i class="fas fa-reply"></i> Xem phản hồi (0)</div>
+                                     <div style="font-size: 12px;cursor:pointer"><i class="fas fa-comment"></i> Trả lời</div>
+
+                               </div>
+
+                                 <div class="p-3" id="cmt_reply_${res.id}" data_reply="${res.id}">
+
+                                  </div>
+
+
+
+                                <hr />
+
+
+                    `
+                const newChildElement = document.createElement('div');
+                newChildElement.innerHTML = commentItemHtml;
+                document.querySelector('.loading-comment').classList.add('d-none');
+                commentBox.insertBefore(newChildElement, commentBox.firstChild);
+
+            }
+
+        }
+
+        if (commentType == 'Replies') {
+
+        }
+
+    
+       
+        
+    }
+
+
+    document.getElementById('btn_create_cmt').addEventListener('click', (e) => {
+        createComment("Comments")
+    })
+    loadComment();
+
+    
+   
+
+
+
+</script>
+
+
+
+
+
+    
 
 

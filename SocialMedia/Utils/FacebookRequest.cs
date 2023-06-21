@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -34,6 +35,39 @@ namespace SocialMedia.Utils
             catch (Exception ex)
             {
                 return new ErrorResponse(-1, ex.Message);
+            }
+        }
+
+        public async Task<object> Post<T>(string url, string bodyJson = null)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+
+                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                if (bodyJson != null)
+                {
+                    var content = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+                    request.Content = content;
+                }
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var res = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<T>(res);
+                }
+                else
+                {
+                    var res = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<FacebookError>(res);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResponse(-1, ex.Message);
+
             }
         }
 

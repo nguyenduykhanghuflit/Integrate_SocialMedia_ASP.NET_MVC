@@ -134,6 +134,7 @@
     <Compile Include="Services\InstagramService.cs" />
     <Compile Include="Utils\FacebookRequest.cs" />
     <Compile Include="Utils\Request.cs" />
+    <Compile Include="Utils\Types.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
