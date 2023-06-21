@@ -14,7 +14,7 @@
     }
     else
     {
-
+        
         var media = (List<InstagramMedia>)ViewBag.Media;
         <div class="body_ins">
             <header>
@@ -65,16 +65,18 @@
 
                 <div class="container">
                     <div class="gallery">
-
-                        @foreach (var item in media)
+                        @if (media != null && media.Count() > 0)
                         {
 
-                            if (item.media_type == "VIDEO")
+                            foreach (var item in media)
                             {
-                                <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
-                                    <video id="video_@item.id" controls  class="gallery-image" alt="">
-                                        <source src="@item.media_url">
-                                    </video>
+
+                                if (item.media_type == "VIDEO")
+                                {
+                                    <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
+                                        <video id="video_@item.id" controls class="gallery-image" alt="">
+                                            <source src="@item.media_url">
+                                        </video>
                                         <div onmouseover="handleAutoPlay(video_@item.id);" onmouseout="handlePasue(video_@item.id);" class="gallery-item-info">
                                             <ul>
                                                 <li class="gallery-item-likes"><span class="visually-hidden">Likes: </span><i class="fas fa-heart" aria-hidden="true"></i> @item.like_count</li>
@@ -82,27 +84,30 @@
                                             </ul>
 
                                         </div>
-                                </div>
-                            
+                                    </div>
+
+                                }
+
+                                if (item.media_type == "IMAGE")
+                                {
+
+                                    <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
+                                        <img src="@item.media_url" class="gallery-image" alt="">
+                                        <div class="gallery-item-info">
+
+                                            <ul>
+                                                <li class="gallery-item-likes"><span class="visually-hidden">Likes: </span><i class="fas fa-heart" aria-hidden="true"></i> @item.like_count</li>
+                                                <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>  @item.comments_count</li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                }
+
                             }
 
-                            if (item.media_type == "IMAGE")
-                            {
-                          
-                            <div class="gallery-item" onclick="window.location.href='/instagram/media?id=@item.id'" tabindex="0">
-                                <img src="@item.media_url" class="gallery-image" alt="">
-                                <div class="gallery-item-info">
-
-                                    <ul>
-                                        <li class="gallery-item-likes"><span class="visually-hidden">Likes: </span><i class="fas fa-heart" aria-hidden="true"></i> @item.like_count</li>
-                                        <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>  @item.comments_count</li>
-                                        
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                            }
 
 
                         }

@@ -16,6 +16,8 @@ namespace SocialMedia.Services
         private readonly string AccessToken;
         private static readonly string fbUrl = "https://graph.facebook.com/v17.0/";
 
+
+
         public InstagramService(string AccessToken)
         {
             this.AccessToken = AccessToken;
@@ -68,11 +70,37 @@ namespace SocialMedia.Services
         public async Task<object> GetMediaDetail(string id)
         {
             FacebookRequest facebookRequest = new FacebookRequest();
-            var url = fbUrl + id +
-               "?fields=caption,comments_count,id,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,thumbnail_url,timestamp,shortcode,username,comments{from,like_count,text,timestamp,user,username,replies{user,username,from,like_count,text,timestamp},media,id,hidden,parent_id},children,owner&access_token="
+            string url = fbUrl + id +
+               "?fields=caption,comments_count,id,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,thumbnail_url,timestamp,shortcode,username,children,owner&access_token="
                + AccessToken;
             return await facebookRequest.Get<InstagramMedia>(url);
 
+        }
+
+
+        public async Task<object> GetMediaComment(string ig_media_id)
+        {
+            FacebookRequest facebookRequest = new FacebookRequest();
+            string url = fbUrl + ig_media_id + "/comments";
+            string fields = "?fields=from,id,like_count,replies,timestamp,text,user,username&access_token=" + AccessToken;
+            return await facebookRequest.Get<Comments>(url + fields);
+        }
+
+        public async Task<object> GetCommentReply(string ig_comment_id)
+        {
+            FacebookRequest facebookRequest = new FacebookRequest();
+            string url = fbUrl + ig_comment_id + "/replies";
+            string fields = "?fields=from,id,like_count,timestamp,text,user,username&access_token=" + AccessToken;
+            return await facebookRequest.Get<Comments>(url + fields);
+        }
+
+        public async Task<object> CreateComment(string id, string message, CommentType commentType)
+        {
+
+            FacebookRequest facebookRequest = new FacebookRequest();
+            string endpoint = commentType == CommentType.Comments ? "/comments" : "/replies";
+            string url = fbUrl + id + endpoint + $"?message={message}&access_token={AccessToken}";
+            return await facebookRequest.Post<CommentItem>(url);
         }
 
     }

@@ -108,6 +108,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @Scripts.Render("~/script/sidebar")
     @RenderSection("scripts", required: false)
+
+    <script>
+        function convertDate(dateString) {
+            // Lấy số từ chuỗi ngày tháng
+            var date = new Date(parseInt(dateString.substr(6)));
+
+            // Tính khoảng thời gian giữa ngày hiện tại và ngày truyền vào
+            var seconds = Math.floor((new Date() - date) / 1000);
+            var minutes = Math.floor(seconds / 60);
+            var hours = Math.floor(minutes / 60);
+            var days = Math.floor(hours / 24);
+            var months = Math.floor(days / 30);
+            var years = Math.floor(months / 12);
+
+            // Trả về chuỗi dạng 1 giây trước, phút trước, giờ trước, ngày trước, tháng trước, năm trước tùy vào khoảng thời gian
+            if (seconds < 60) {
+                return seconds + " giây trước";
+            } else if (minutes < 60) {
+                return minutes + " phút trước";
+            } else if (hours < 24) {
+                return hours + " giờ trước";
+            } else if (days < 30) {
+                return days + " ngày trước";
+            } else if (months < 12) {
+                return months + " tháng trước";
+            } else {
+                return years + " năm trước";
+            }
+        }
+
+    </script>
     <!-- Script end-->
 </body>
 </html>
@@ -121,47 +152,3 @@
 
 
 
-<!--<body>
-
-
-
-
-
-
-    <!--@*
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("SenVangSolutions", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li>@Html.ActionLink("Fanpage", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li  id="btn-login-fb" onclick="handleLogin();"><div>
-                            <img width="20" height="20" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png" alt="Login" />
-                            Login Facebook
-                               </div>
-                        </li>
-                        <li id="btn-logout-fb" onclick="logout();"><a>Đăng xuất</a>li>
-                    </ul>
-                </div>
-            </div>
-        </div>*@
-
-
-    <div class="container body-content">
-        <div id="status">
-        </div>
-
-    </div>-->
-<!-- Load the JS SDK asynchronously -->
-<!--</body>-->
