@@ -4,59 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .dx-htmleditor-content img {
-        vertical-align: middle;
-    }
-
-    .dx-htmleditor-content table {
-        width: 50%;
-    }
-
-        .dx-htmleditor-content table td:last-child {
-            text-align: right;
-        }
-
-    #html-editor {
-        height: 400px;
-    }
-
-    #submit-data-editor {
-        font-size: 13px;
-        padding: 7px;
-        border: none;
-        outline: none;
-        overflow: hidden;
-        border-radius: 5px;
-        background-color: #20acda;
-        color: white;
-        margin-bottom:15px;
-    }
-
-        #submit-data-editor:hover {
-            background-color: #6ecbea;
-
-        }
-    #btn-back {
-        background-color: #93a4e8;
-        font-size: 13px;
-        padding: 7px;
-        border: none;
-        outline: none;
-        overflow: hidden;
-        border-radius: 5px;
-        color: white;
-        margin-bottom: 15px;
-    }
-
-        #btn-back:hover {
-            background-color: #7192bf;
-            color: white;
-        }
-</style>
-<body>
-
-
+<div>
+    <!-- Breadcrumb start -->
     <nav class="" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -68,27 +17,30 @@
             <li class="breadcrumb-item active" aria-current="page">Tạo bài viết</li>
         </ol>
     </nav>
-    <div class="d-flex gap-2 mt-2">
-
-        <a class="d-flex align-items-center btn-custom" id="btn-back" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
-        <button class="d-flex align-items-center justify-content-center" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></button>
+    <!-- Breadcrumb end -->
+    <!-- Button list start -->
+    <div class="row px-2 gap-1">
+        <a class="btn-custom btn-back col-md-2" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="btn-custom btn-save col-md-2" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></button>
     </div>
     <div class="p-1" id="error_post"></div>
     <div class="col-md-8 col-sm-12 mb-1">
         <input type="text" maxlength="100" id="post_title" placeholder="Nhập tiêu đề cho bài viết (dưới 100 kí tự)" class="form-control" value="" />
     </div>
-    <div class="dx-viewport">
+    <!-- Button list end -->
+    <!-- Render data start-->
+    <div class="dx-viewport mb-1">
         <div id="html-editor">
         </div>
     </div>
-    <div class="d-flex gap-2 mt-2">
-
-        <a class="d-flex align-items-center btn-custom" id="btn-back" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
-        <button class="d-flex align-items-center justify-content-center" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></button>
+    <!-- Render data end-->
+    <!-- Button list start -->
+    <div class="row px-2 gap-1 mb-2 ">
+        <a class="btn-custom btn-back col-md-2" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="btn-custom btn-save col-md-2" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></button>
     </div>
-
-
-</body>
+    <!-- Button list end -->
+</div>
 
 <script>
 

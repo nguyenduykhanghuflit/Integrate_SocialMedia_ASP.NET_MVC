@@ -1,36 +1,25 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+
 <style>
-    #btn-create-post {
-        background-color: #20acda;
+    .article-image img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
     }
 
-        #btn-create-post:hover {
-            background-color: #6ecbea;
-            color: white;
+    .article-title,.article-text {
+        color: #333;
+    }
+
+        .article-title:hover {
+            color: #20acda;
         }
-    .article-image img{
-        width:100%;
-        height:300px;
-        object-fit:cover;
-    }
-    /*.article-content{
-        width:400px;
-    }
-    #main_post{
-  
-    }
-    .article{
-        width:800px;
-    }*/
-    .article-title a{
-        color:#333;
-    }
-    .article-title a:hover {
-        color: #20acda;
-    }
 </style>
+
+
+<!-- Breadcrumb start -->
 <nav class="" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -42,41 +31,45 @@
         <li class="breadcrumb-item active" aria-current="page">Tất cả bài viết</li>
     </ol>
 </nav>
-
-<a class="btn-custom" id="btn-create-post" href="/Home/CreatePost"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></a>
-
-
-<div id="main_post" class="container-fluid">
+<!-- Breadcrumb end -->
 
 
+
+<!-- Button list start -->
+<div class="row px-2">
+    <a class="btn-custom btn-create col-md-2 col-sm-12 col-xs-12" href="/Home/CreatePost"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></a>
 </div>
+<!-- Button list end -->
+
+
+
+<!-- Render data start-->
+<div id="main_post">
+</div>
+<!-- Render data end-->
+
+
 
 <script>
-    function convertDate(dateString) {
-        // Lấy số từ chuỗi ngày tháng
-        var date = new Date(parseInt(dateString.substr(6)));
+    function filterUniqueItems(arr) {
+        const uniqueSet = new Set(arr);
+        const uniqueArr = [...uniqueSet];
+        const uniqueStr = uniqueArr.join(' ');
+        return uniqueStr;
+    }
+    function getEstimatedTime(text) {
+        const words = text.split(' ');
+        const wordCount = words.length;
+        const secondsPerWord = 0.4;
+        const totalSeconds = wordCount * secondsPerWord;
+        let totalMinutes = Math.ceil(totalSeconds / 60);
 
-        // Tính khoảng thời gian giữa ngày hiện tại và ngày truyền vào
-        var seconds = Math.floor((new Date() - date) / 1000);
-        var minutes = Math.floor(seconds / 60);
-        var hours = Math.floor(minutes / 60);
-        var days = Math.floor(hours / 24);
-        var months = Math.floor(days / 30);
-        var years = Math.floor(months / 12);
-
-        // Trả về chuỗi dạng 1 giây trước, phút trước, giờ trước, ngày trước, tháng trước, năm trước tùy vào khoảng thời gian
-        if (seconds < 60) {
-            return seconds + " giây trước";
-        } else if (minutes < 60) {
-            return minutes + " phút trước";
-        } else if (hours < 24) {
-            return hours + " giờ trước";
-        } else if (days < 30) {
-            return days + " ngày trước";
-        } else if (months < 12) {
-            return months + " tháng trước";
+        if (totalMinutes >= 60) {
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            return `${hours} giờ ${minutes} phút đọc`;
         } else {
-            return years + " năm trước";
+            return `${totalMinutes} phút đọc`;
         }
     }
     const loadPost = async () => {
@@ -93,33 +86,42 @@
             let postItemHtml = ''
 
             data.forEach(item => {
+
+             
+
+                //Get first image of post for cover photo
                 const parser = new DOMParser();
                 const htmlDoc = parser.parseFromString(item.Notes, 'text/html');
+                const texts = Array.from(htmlDoc.querySelectorAll('*'))
+                    .map(element => element.textContent.trim())
+                    .filter(text => text !== '');
+                var text = filterUniqueItems(texts).split(' ').slice(0, 50).join(' ') + ".....";
+                var estimatedTime = getEstimatedTime(filterUniqueItems(texts));
                 const firstImg = htmlDoc.querySelector('img');
                 const srcImg = firstImg.getAttribute('src');
                 var time = convertDate(item.CreatedDate)
+       
                 postItemHtml += `
-            <div class="article p-0 gap-1 row mt-2 mb-3">
-          <div class="article-image col-md-4">
-            <img src="${srcImg}" alt="Image">
-          </div>
-          <div class="article-content col-md-4 col-sm-12">
-            <h2 class="article-title"><a href="/Home/DetailPost/${item.Id}">${item.Title}</a></h2>
-            <p class="article-summary">${time}</p>
-          </div>
-        </div>
-             
+                    <a href="/Home/DetailPost/${item.Id}">
+                        <div class="article p-0 gap-1 row mt-2 mb-3">
+                             <div class="article-image col-md-4">
+                                <img src="${srcImg}" alt="Image">
+                             </div>
+                             <div class="article-content col-md-4 col-sm-12">
+                                <h2 class="article-title">${item.Title}</h2>
+                                <div class="d-flex justify-content-between">
+                                <div class="article-time">${time}</div>
+                                <div class="article-time">${estimatedTime}</div>
+                                 </div>
+                                <div class="article-text">${text}</div>
+                             </div>
+                         </div>
+                    </a>
+
             `
             })
             $('#main_post').html(postItemHtml);
 
-         /*   const summary = document.querySelectorAll('.article-summary');
-            summary.forEach(item => {
-                const content = item.textContent;
-                console.log(content)
-           *//*     const shortContent = content.split(' ').slice(0, 100).join(' ');
-                item.textContent = shortContent + '...';*//*
-            })*/
         }
     }
 
