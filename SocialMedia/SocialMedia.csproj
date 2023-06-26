@@ -120,6 +120,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CateringController.cs" />
     <Compile Include="Controllers\FacebookAuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstagramController.cs" />
@@ -220,6 +221,7 @@
     <Content Include="Views\Home\CreatePost.cshtml" />
     <Content Include="Views\Home\DetailPost.cshtml" />
     <Content Include="Views\Home\EditPost.cshtml" />
+    <Content Include="Views\Catering\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
