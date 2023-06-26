@@ -40,7 +40,8 @@ namespace SocialMedia.Services
                 string pageAccessToken = pageInfoData.data[0].access_token;
 
                 string url = fbUrl + pageId
-                  + "?fields=instagram_business_account,global_brand_page_name,name,about,followers_count,app_id,picture{url,width,height},business,fan_count&access_token="
+                  + "?fields=instagram_business_account,global_brand_page_name,name,about,followers_count,app_id,picture{url,width,height}" +
+                  ",business,fan_count&access_token="
                   + pageAccessToken;
 
                 var insInfo = await facebookRequest.Get<InstagramInfo>(url);
@@ -54,18 +55,16 @@ namespace SocialMedia.Services
                     var insInfoData = (InstagramInfo)insInfo;
                     string insId = insInfoData.instagram_business_account.id;
                     var urlProfile = fbUrl + insId +
-                       "?fields=username,followers_count,follows_count,biography,media_count,name,profile_picture_url,media,stories,ig_id,id&access_token=" + pageAccessToken;
+                       "?fields=username,followers_count,follows_count,biography,media_count,name,profile_picture_url,media," +
+                       "stories,ig_id,id&access_token=" + pageAccessToken;
                     object instagramProfile = await facebookRequest.Get<InstagramProfile>(urlProfile);
-
                     return instagramProfile;
                 }
 
             }
-
-
-
-
         }
+
+
 
         public async Task<object> GetMediaDetail(string id)
         {

@@ -7,12 +7,36 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+
     @Styles.Render("~/style/custom")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- DevExtreme theme -->
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.3/css/dx.light.css">
+
+    <style>
+        .btn-custom {
+            display: block;
+            min-width: 120px;
+            max-width:150px;
+            font-size:12px;
+            padding: 7px;
+            text-align:center;
+            border: none;
+            outline: none;
+            overflow: hidden;
+            border-radius: 5px;
+            justify-content: center;
+            color: white;
+        }
+        .breadcrumb-item + .breadcrumb-item::before{
+            display:none;
+        }
+         
+    </style>
 </head>
 
 <body id="body-pd">
-
-
+   
 
     <!-- Facebook plugin start -->
     <!-- Messenger Plugin chat Code -->
@@ -29,42 +53,42 @@
     </script>
 
 
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: 280910524463703,
-                cookie: true,                     // Enable cookies to allow the server to access the session.
-                xfbml: true,                     // Parse social plugins on this webpage.
-                version: 'v17.0'           // Use this Graph API version for this call.
-            });
+    @*    <script>
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: 280910524463703,
+                    cookie: true,                     // Enable cookies to allow the server to access the session.
+                    xfbml: true,                     // Parse social plugins on this webpage.
+                    version: 'v17.0'           // Use this Graph API version for this call.
+                });
 
 
-            FB.getLoginStatus(function (response) {   // Called after the JS SDK has been initialized.
-                if (response.status === 'connected') {
-                  
-                } else {
-                    console.log("::facebook check: chưa login -> navigation")
-                    window.location.href = "/FacebookAuth/login"
+                FB.getLoginStatus(function (response) {   // Called after the JS SDK has been initialized.
+                    if (response.status === 'connected') {
 
-                }
-            });
-        };
-        function logout() {
-            FB.logout(function (response) {
-                window.location.href = "/FacebookAuth/logout"
+                    } else {
+                        console.log("::facebook check: chưa login -> navigation")
+                        window.location.href = "/FacebookAuth/login"
 
-            });
-        }
+                    }
+                });
+            };
+            function logout() {
+                FB.logout(function (response) {
+                    window.location.href = "/FacebookAuth/logout"
+
+                });
+            }
 
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>*@
     <!-- Facebook plugin end -->
     <!-- Navbar start -->
     <header class="header" id="header">
@@ -82,11 +106,11 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
-                <a href="/" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">Dashboard</span> </a>
+                <a href="/" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">Sen Vàng</span> </a>
                 <div class="nav_list">
-                    <a href="/" class="nav_link active"> <i class='bx bxl-facebook nav_icon'></i> <span class="nav_name">Facebook</span> </a>
-                    <a href="/Instagram/Index" class="nav_link active"> <i class='bx bxl-instagram nav_icon'></i> <span class="nav_name">Instagram</span> </a>
-                   @* <a href="/social" class="nav_link"> <i class='bx bx-comment-dots nav_icon'></i> <span class="nav_name">Social</span> </a>*@
+                    <a href="/" class="nav_link active"> <i class='bx bx-comment-detail nav_icon'></i> <span class="nav_name">Bài viết</span> </a>
+                    @*<a href="/Instagram/Index" class="nav_link active"> <i class='bx bxl-instagram nav_icon'></i> <span class="nav_name">Instagram</span> </a>*@
+                    @* <a href="/social" class="nav_link"> <i class='bx bx-comment-dots nav_icon'></i> <span class="nav_name">Social</span> </a>*@
                     @*    <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a>
                         <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Bookmark</span> </a>
                         <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a>
@@ -106,6 +130,10 @@
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!--DEVXTREME-->
+    <script src="https://cdn3.devexpress.com/jslib/23.1.3/js/dx-quill.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/23.1.3/js/dx.all.js"></script>
     @Scripts.Render("~/script/sidebar")
     @RenderSection("scripts", required: false)
 

@@ -1,31 +1,128 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<style>
+    #btn-create-post {
+        background-color: #20acda;
+    }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        #btn-create-post:hover {
+            background-color: #6ecbea;
+            color: white;
+        }
+    .article-image img{
+        width:100%;
+        height:300px;
+        object-fit:cover;
+    }
+    /*.article-content{
+        width:400px;
+    }
+    #main_post{
+  
+    }
+    .article{
+        width:800px;
+    }*/
+    .article-title a{
+        color:#333;
+    }
+    .article-title a:hover {
+        color: #20acda;
+    }
+</style>
+<nav class="" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a class="d-flex align-items-center" href="/">
+                <span>Danh sách bài viết</span>
+                <i class='bx bx-chevrons-right'></i>
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Tất cả bài viết</li>
+    </ol>
+</nav>
+
+<a class="btn-custom" id="btn-create-post" href="/Home/CreatePost"> <i class='bx bx-add-to-queue'></i> <span>Tạo bài viết </span></a>
+
+
+<div id="main_post" class="container-fluid">
+
+
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<script>
+    function convertDate(dateString) {
+        // Lấy số từ chuỗi ngày tháng
+        var date = new Date(parseInt(dateString.substr(6)));
+
+        // Tính khoảng thời gian giữa ngày hiện tại và ngày truyền vào
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var minutes = Math.floor(seconds / 60);
+        var hours = Math.floor(minutes / 60);
+        var days = Math.floor(hours / 24);
+        var months = Math.floor(days / 30);
+        var years = Math.floor(months / 12);
+
+        // Trả về chuỗi dạng 1 giây trước, phút trước, giờ trước, ngày trước, tháng trước, năm trước tùy vào khoảng thời gian
+        if (seconds < 60) {
+            return seconds + " giây trước";
+        } else if (minutes < 60) {
+            return minutes + " phút trước";
+        } else if (hours < 24) {
+            return hours + " giờ trước";
+        } else if (days < 30) {
+            return days + " ngày trước";
+        } else if (months < 12) {
+            return months + " tháng trước";
+        } else {
+            return years + " năm trước";
+        }
+    }
+    const loadPost = async () => {
+        $('#main_post').html(`<div>Loading.....</div>`)
+        const req = await fetch('/home/getpost');
+        const res = await req.json();
+
+        if (res.error < 0) {
+            return $('#main_post').html(`<h3 class="text-danger">Lỗi khi lấy bài viết....</h3>`)
+
+        }
+        else {
+            const data = res.data;
+            let postItemHtml = ''
+
+            data.forEach(item => {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(item.Notes, 'text/html');
+                const firstImg = htmlDoc.querySelector('img');
+                const srcImg = firstImg.getAttribute('src');
+                var time = convertDate(item.CreatedDate)
+                postItemHtml += `
+            <div class="article p-0 gap-1 row mt-2 mb-3">
+          <div class="article-image col-md-4">
+            <img src="${srcImg}" alt="Image">
+          </div>
+          <div class="article-content col-md-4 col-sm-12">
+            <h2 class="article-title"><a href="/Home/DetailPost/${item.Id}">${item.Title}</a></h2>
+            <p class="article-summary">${time}</p>
+          </div>
+        </div>
+             
+            `
+            })
+            $('#main_post').html(postItemHtml);
+
+         /*   const summary = document.querySelectorAll('.article-summary');
+            summary.forEach(item => {
+                const content = item.textContent;
+                console.log(content)
+           *//*     const shortContent = content.split(' ').slice(0, 100).join(' ');
+                item.textContent = shortContent + '...';*//*
+            })*/
+        }
+    }
+
+
+    loadPost()
+</script>

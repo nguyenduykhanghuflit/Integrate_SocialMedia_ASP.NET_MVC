@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "CreatePost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dx-htmleditor-content img {
+        vertical-align: middle;
+    }
+
+    .dx-htmleditor-content table {
+        width: 50%;
+    }
+
+        .dx-htmleditor-content table td:last-child {
+            text-align: right;
+        }
+
+
+
+    #submit-data-editor {
+        font-size: 13px;
+        padding: 7px;
+        border: none;
+        outline: none;
+        overflow: hidden;
+        border-radius: 5px;
+        background-color: #20acda;
+        color: white;
+        margin-bottom: 15px;
+    }
+
+        #submit-data-editor:hover {
+            background-color: #6ecbea;
+        }
+
+    #btn-back {
+        background-color: #93a4e8;
+        font-size: 13px;
+        padding: 7px;
+        border: none;
+        outline: none;
+        overflow: hidden;
+        border-radius: 5px;
+        color: white;
+        margin-bottom: 15px
+    }
+
+        #btn-back:hover {
+            background-color: #7192bf;
+            color: white;
+        }
+       
+</style>
+<div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="d-flex align-items-center" href="/">
+                    <span>Danh sách bài viết</span>
+                    <i class='bx bx-chevrons-right'></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item active" id="breadcrumd_title" aria-current="page">
+
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách bài viết</li>
+        </ol>
+    </nav>
+    <div class="d-flex gap-2">
+
+        <a class="d-flex align-items-center btn-custom" id="btn-back" href="/Home/DetailPost/@ViewBag.Id"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="d-flex align-items-center justify-content-center" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Lưu bài viết </span></button>
+    </div>
+
+    <div id="show_err">
+    </div>
+
+    <div class="col-md-8 col-sm-12 mb-1">
+        <input type="text" maxlength="100" id="post_title" placeholder="Nhập tiêu đề cho bài viết (dưới 100 kí tự)" class="form-control" value="" />
+    </div>
+
+    <div class="dx-viewport">
+        <div id="html-editor">
+
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-2">
+
+        <a class="d-flex align-items-center btn-custom" id="btn-back" href="/Home/DetailPost/@ViewBag.Id"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="d-flex align-items-center justify-content-center" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Lưu bài viết </span></button>
+    </div>
+
+</div>
+
+<script>
+
+    $( function  () {
+
+        async function loadData() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+
+            const req = await fetch(`/home/getpost?id=${id}`);
+            const res = await req.json();
+
+            if (res.error < 0) {
+                return $('#show_err').html(`<h3 class="text-danger">Lỗi khi lấy bài viết....</h3>`)
+
+            }
+            else {
+                const data = res.data;
+                $("#post_title").val(data.Title)
+                $("#breadcrumd_title").html(`
+                 <a class="d-flex align-items-center" href="/Home/DetailPost/${data.Id}">
+                    <span>${data.Title}</span>
+                    <i class='bx bx-chevrons-right'></i>
+                </a>
+                    `)
+                const editorInstance = $("#html-editor").dxHtmlEditor({
+                    value: data.Notes,
+                    toolbar: {
+                        items: [
+                            /*{
+                                widget: 'dxButton',
+                                options: {
+                                    text: 'Tạo bài viết',
+                                    stylingMode: 'text',
+                                    onClick() {
+                                        alert("Sẽ tạo")
+                                    },
+                                },
+                            },*/
+                            "undo",
+                            "redo",
+                            "separator",
+                            {
+                                name: "size",
+                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"]
+                            },
+                            {
+                                name: "font",
+                                acceptedValues: ["Times New Roman", "Arial", "Courier New", "Georgia", "Impact", "Lucida Console", "Tahoma", "Verdana"]
+                            },
+                            "separator",
+                            "bold",
+                            "italic",
+                            "strike",
+                            "underline",
+                            "separator",
+                            "alignLeft",
+                            "alignCenter",
+                            "alignRight",
+                            "alignJustify",
+                            "separator",
+                            "orderedList",
+                            "bulletList",
+                            "separator",
+                            {
+                                name: "header",
+                                acceptedValues: [false, 1, 2, 3, 4, 5]
+                            },
+                            "separator",
+                            "color",
+                            "background",
+                            "separator",
+                            "link",
+                            "image",
+                            "separator",
+                            "clear",
+                            "codeBlock",
+                            "blockquote",
+                            "separator",
+                            "insertTable"
+                        ],
+                        multiline: true
+                    },
+                    tableContextMenu: {
+                        enabled: true
+                    },
+                    mediaResizing: {
+                        enabled: true
+                    }
+                }).dxHtmlEditor("instance");
+
+
+                //handle submit
+                $("#submit-data-editor").click(async () => {
+                    const data = editorInstance.option("value");
+                    const Title = $("#post_title").val();
+                    if (data&&Title) {
+                        const request = await fetch(
+                            '/Home/UpdatePost',
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ Notes: data, Title, Id: id })
+                            }
+                        )
+                        const res = await request.json();
+
+                        if (res.error == 0) {
+
+
+                            $('#show_err').html(`<h3 class="text-success">Đã cập nhật bài viết</h3>`)
+                        }
+                        else {
+                            $('#show_err').html(`<h3 class="text-danger">Lỗi cập nhật bài viết</h3>`)
+                        }
+
+
+                    }
+                })
+
+            }
+        }
+
+        loadData();
+   
+
+
+
+       
+
+    });
+</script>
+

@@ -1,0 +1,87 @@
+﻿@using SocialMedia.Models;
+@{
+    ViewBag.Title = "DetailPost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #btn-edit-post {
+        background-color: #20acda;
+        font-size: 13px;
+        padding: 7px;
+    }
+
+        #btn-edit-post:hover {
+            background-color: #6ecbea;
+            color: white;
+        }
+
+    #btn-del-post {
+        background-color: #f95555;
+        font-size: 13px;
+        outline: none;
+        border: none;
+        overflow: hidden;
+        padding: 7px;
+    }
+
+        #btn-del-post:focus {
+            border: none;
+        }
+
+        #btn-del-post:hover {
+            background-color: #f06464;
+            color: white;
+        }
+    #btn-back {
+        background-color: #93a4e8;
+        font-size: 13px;
+        padding: 7px;
+    }
+        #btn-back:hover {
+            background-color: #7192bf;
+            color: white;
+        }
+</style>
+
+<div>
+   
+    
+
+    @{
+        var data = (PostResponse)ViewBag.Data;
+        <nav class="" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="d-flex align-items-center" href="/">
+                        <span>Danh sách bài viết</span>
+                        <i class='bx bx-chevrons-right'></i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@data.Title</li>
+            </ol>
+        </nav>
+        <div>
+            <div class="d-flex gap-2">
+
+                <a class="d-flex align-items-center btn-custom" id="btn-back" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+                <a class="d-flex align-items-center btn-custom" id="btn-edit-post" href="/Home/EditPost?id=@data.Id"> <i class='bx bx-add-to-queue'></i> <span>  Chỉnh sửa </span></a>
+                <a  class="d-flex align-items-center btn-custom"  href="/Home/DeletePost?id=@data.Id" id="btn-del-post"> <i class='bx bx-message-square-x'></i> <span>  Xóa bài </span></a>
+            </div>
+            <div class="mt-4">
+                <h2><b>@data.Title</b></h2>
+                <span>@data.CreatedDate</span>
+                <p>
+
+                    @Html.Raw(@data.Notes)
+                </p>
+            </div>
+
+        </div>
+    }
+
+
+
+</div>
+
+
