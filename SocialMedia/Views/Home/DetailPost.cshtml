@@ -1,0 +1,53 @@
+﻿@using SocialMedia.Models;
+@{
+    ViewBag.Title = "DetailPost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+
+
+
+    @{
+        var data = (PostResponse)ViewBag.Data;
+        <!-- Breadcrumb start -->
+        <nav class="" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="d-flex align-items-center" href="/">
+                        <span>Danh sách bài viết</span>
+                        <i class='bx bx-chevrons-right'></i>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">@data.Title</li>
+            </ol>
+        </nav>
+        <!-- Breadcrumb end -->
+        <div>
+            <!-- Button list start -->
+            <div class="row px-2 gap-1">
+                <a class="btn-custom btn-back col-md-2" href="/Home"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+                <a class="btn-custom btn-edit col-md-2" href="/Home/EditPost?id=@data.Id"> <i class='bx bx-add-to-queue'></i> <span>  Chỉnh sửa </span></a>
+                <a class="btn-custom btn-del col-md-2" href="/Home/DeletePost?id=@data.Id"> <i class='bx bx-message-square-x'></i> <span>  Xóa bài </span></a>
+            </div>
+            <!-- Button list end -->
+            <!-- Render data start -->
+            <div class="mt-4">
+                <h2><b>@data.Title</b></h2>
+                <span>@data.CreatedDate</span>
+                <p>
+
+                    @Html.Raw(@data.Notes)
+                </p>
+            </div>
+            <!-- Render data end -->
+
+        </div>
+    }
+
+
+
+</div>
+
+

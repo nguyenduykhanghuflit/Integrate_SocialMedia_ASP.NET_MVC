@@ -49,22 +49,24 @@
     .comment-box::-webkit-scrollbar-track {
         background-color: #ccc;
     }
-    .detail-comment{
-        position:relative;
+
+    .detail-comment {
+        position: relative;
     }
+
     .loading-comment {
         position: absolute;
-        background:rgb(53, 50, 50,.4);
+        background: rgb(53, 50, 50,.4);
         width: 100%;
         height: 100%;
-        z-index:9999;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:white;
-        font-size:20px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
     }
-  
+   
 </style>
 
 
@@ -78,6 +80,7 @@
 else
 {
     InstagramMedia data = (InstagramMedia)ViewBag.Data;
+
 
 
 
@@ -124,7 +127,7 @@ else
                         <div class="input-group mb-3 comment_media">
                             <input type="text" class="form-control" data-media="@data.id" name="input_comment_media" placeholder="Bình luận..." aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary" id="btn_create_cmt"  type="button"><i class='bx bx-send'></i></button>
+                                <button class="btn btn-outline-primary" id="btn_create_cmt" type="button"><i class='bx bx-send'></i></button>
                             </div>
                         </div>
                         <!--Use api load comment-->
@@ -156,7 +159,7 @@ else
             const commentBox = document.querySelector('.comment-box');
 
             if (!ig_media_id) {
-              return  commentBox.innerHTML = `<h5 class="text-danger">Client Error: Can not load comment</h5>`
+                return commentBox.innerHTML = `<h5 class="text-danger">Client Error: Can not load comment</h5>`
             }
             else {
                 commentBox.innerHTML = '<span>Đang tải...</span>';
@@ -166,7 +169,7 @@ else
                 if (res.error) {
                     return commentBox.innerHTML = `<h5 class="text-danger">Client Error: ${res.error.message}</h5>`
                 }
-             
+
                 let listCommentHtml = '';
 
                 res?.data?.forEach(item => {
@@ -205,7 +208,7 @@ else
                     listCommentHtml += commentItemHtml;
                 })
 
-               return commentBox.innerHTML = listCommentHtml;
+                return commentBox.innerHTML = listCommentHtml;
             }
         }
         catch (error) {
@@ -235,7 +238,7 @@ else
                     if (res.error) {
                         return element.innerHTML = `<h5 class="text-danger">Client Error: ${res.error.message}</h5>`
                     }
-                  
+
                     let listCommentHtml = '';
                     if (res.data.length == 0) return element.innerHTML = '<span>Không có phản hồi nào</span>';
                     res?.data?.forEach(item => {
@@ -261,7 +264,7 @@ else
 
 
             }
-         
+
         }
         catch (error) {
             console.log(`::::Error:->>>`)
@@ -276,7 +279,7 @@ else
         if (commentType == 'Comments') {
             const value = document.getElementsByName('input_comment_media')[0].value;
             const idMedia = document.getElementsByName('input_comment_media')[0].getAttribute("data-media")
-        
+
             const data = await fetch(`/instagram/CreateComment?id=${idMedia}&message=${value}&commentType=${commentType}`, { method: "POST" })
             const res = await data.json();
             if (res.error) {
@@ -327,9 +330,9 @@ else
 
         }
 
-    
-       
-        
+
+
+
     }
 
 
@@ -338,8 +341,8 @@ else
     })
     loadComment();
 
-    
-   
+
+
 
 
 
@@ -349,6 +352,6 @@ else
 
 
 
-    
+
 
 

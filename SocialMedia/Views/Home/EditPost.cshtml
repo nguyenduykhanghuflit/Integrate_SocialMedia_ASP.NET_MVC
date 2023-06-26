@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "CreatePost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    
+     
+</style>
+<div>
+    <!-- Breadcrumb start -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="d-flex align-items-center" href="/">
+                    <span>Danh sách bài viết</span>
+                    <i class='bx bx-chevrons-right'></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item active" id="breadcrumd_title" aria-current="page">
+
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách bài viết</li>
+        </ol>
+    </nav>
+    <!-- Breadcrumb ennd -->
+    <!-- Button list start -->
+    <div class="row px-2 gap-1">
+        <a class="btn-custom btn-back col-md-2" href="/Home/DetailPost/@ViewBag.Id"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="btn-custom btn-save col-md-2" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Lưu bài viết </span></button>
+    </div>
+    <!-- Button list end -->
+    <!-- Render data start -->
+    <div id="show_err">
+    </div>
+
+    <div class="col-md-8 col-sm-12 mb-1 mt-2">
+        <input type="text" maxlength="100" id="post_title" placeholder="Nhập tiêu đề cho bài viết (dưới 100 kí tự)" class="form-control" value="" />
+    </div>
+
+    <div class="dx-viewport">
+        <div id="html-editor">
+
+        </div>
+    </div>
+    <!-- Render data end -->
+    <!-- Button list start -->
+    <div class="row px-2 gap-1 mb-2 mt-1">
+        <a class="btn-custom btn-back col-md-2" href="/Home/DetailPost/@ViewBag.Id"> <i class='bx bx-arrow-back'></i> <span>  Quay Về </span></a>
+        <button class="btn-custom btn-save col-md-2" id="submit-data-editor"> <i class='bx bx-add-to-queue'></i> <span>Lưu bài viết </span></button>
+    </div>
+    <!-- Button list end -->
+
+</div>
+
+<script>
+
+    $( function  () {
+
+        async function loadData() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+
+            const req = await fetch(`/home/getpost?id=${id}`);
+            const res = await req.json();
+
+            if (res.error < 0) {
+                return $('#show_err').html(`<h3 class="text-danger">Lỗi khi lấy bài viết....</h3>`)
+
+            }
+            else {
+                const data = res.data;
+                $("#post_title").val(data.Title)
+                $("#breadcrumd_title").html(`
+                 <a class="d-flex align-items-center" href="/Home/DetailPost/${data.Id}">
+                    <span>${data.Title}</span>
+                    <i class='bx bx-chevrons-right'></i>
+                </a>
+                    `)
+                const editorInstance = $("#html-editor").dxHtmlEditor({
+                    value: data.Notes,
+                    toolbar: {
+                        items: [
+                            /*{
+                                widget: 'dxButton',
+                                options: {
+                                    text: 'Tạo bài viết',
+                                    stylingMode: 'text',
+                                    onClick() {
+                                        alert("Sẽ tạo")
+                                    },
+                                },
+                            },*/
+                            "undo",
+                            "redo",
+                            "separator",
+                            {
+                                name: "size",
+                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"]
+                            },
+                            {
+                                name: "font",
+                                acceptedValues: ["Times New Roman", "Arial", "Courier New", "Georgia", "Impact", "Lucida Console", "Tahoma", "Verdana"]
+                            },
+                            "separator",
+                            "bold",
+                            "italic",
+                            "strike",
+                            "underline",
+                            "separator",
+                            "alignLeft",
+                            "alignCenter",
+                            "alignRight",
+                            "alignJustify",
+                            "separator",
+                            "orderedList",
+                            "bulletList",
+                            "separator",
+                            {
+                                name: "header",
+                                acceptedValues: [false, 1, 2, 3, 4, 5]
+                            },
+                            "separator",
+                            "color",
+                            "background",
+                            "separator",
+                            "link",
+                            "image",
+                            "separator",
+                            "clear",
+                            "codeBlock",
+                            "blockquote",
+                            "separator",
+                            "insertTable"
+                        ],
+                        multiline: true
+                    },
+                    tableContextMenu: {
+                        enabled: true
+                    },
+                    mediaResizing: {
+                        enabled: true
+                    }
+                }).dxHtmlEditor("instance");
+
+
+                //handle submit
+                $("#submit-data-editor").click(async () => {
+                    const data = editorInstance.option("value");
+                    const Title = $("#post_title").val();
+                    if (data&&Title) {
+                        const request = await fetch(
+                            '/Home/UpdatePost',
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ Notes: data, Title, Id: id })
+                            }
+                        )
+                        const res = await request.json();
+
+                        if (res.error == 0) {
+
+
+                            $('#show_err').html(`<h3 class="text-success">Đã cập nhật bài viết</h3>`)
+                        }
+                        else {
+                            $('#show_err').html(`<h3 class="text-danger">Lỗi cập nhật bài viết</h3>`)
+                        }
+
+
+                    }
+                })
+
+            }
+        }
+
+        loadData();
+   
+
+
+
+       
+
+    });
+</script>
+

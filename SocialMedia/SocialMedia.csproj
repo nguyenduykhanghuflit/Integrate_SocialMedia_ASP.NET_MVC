@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="Models\FacebookResponse.cs" />
     <Compile Include="Models\InstagramResponse.cs" />
+    <Compile Include="Models\PostResponse.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FacebookService.cs" />
@@ -216,6 +217,9 @@
     <Content Include="Views\FacebookAuth\Login.cshtml" />
     <Content Include="Views\Instagram\Index.cshtml" />
     <Content Include="Views\Instagram\Media.cshtml" />
+    <Content Include="Views\Home\CreatePost.cshtml" />
+    <Content Include="Views\Home\DetailPost.cshtml" />
+    <Content Include="Views\Home\EditPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
