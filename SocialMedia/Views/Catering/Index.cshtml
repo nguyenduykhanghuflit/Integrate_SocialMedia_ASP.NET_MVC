@@ -1,0 +1,366 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .btn-search {
+        min-width: 32px;
+    }
+
+    .dx-button.btn-search .dx-button-content {
+        font-size: 120%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .tabs-custom {
+        padding: 7px 10px;
+        border-radius: 5px;
+    }
+
+    .tabs-custom-item {
+        min-width: 12px;
+        padding: 5px 7px;
+        color: #dbcbcb;
+        border-radius: 4px;
+        border: 1px solid #ff0000;
+    }
+
+        .tabs-custom-item:hover, .tabs-custom-item.active {
+            color: white;
+            background: #FF5E18;
+        }
+
+    .food-list {
+        margin: 0 auto;
+    }
+
+    .food-card {
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 0;
+        box-shadow: 0px 0px 3px 0px rgba(199,175,175,0.75);
+        -webkit-box-shadow: 0px 0px 3px 0px rgba(199,175,175,0.75);
+        -moz-box-shadow: 0px 0px 3px 0px rgba(199,175,175,0.75);
+    }
+
+        .food-card:hover {
+            box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+            -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+        }
+
+        .food-card img {
+            outline: none;
+            overflow: hidden;
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+    .food-name {
+        line-height: 1.6rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        width: 100%;
+        -webkit-box-orient: vertical;
+        max-height: 4.8rem;
+        color: #464646;
+        font-family: Noto Sans;
+        font-size: 22px;
+        font-weight: 700
+    }
+
+    .food-price, .food-price i {
+        color: #959595;
+        font-size: 21px;
+        font-family: Noto Sans;
+        font-weight: 700
+    }
+
+    .add-food-to-cart {
+        border: none;
+        outline: none;
+        overflow: hidden;
+        padding: 7px;
+        font-size: 13px;
+        border-radius: 5px;
+        padding: 5px 7px;
+        color: white;
+        background: #FF5E18;
+        border-radius: 4px;
+        border: 1px solid #ff0000;
+    }
+
+        .add-food-to-cart:hover {
+            background: #f66363;
+        }
+</style>
+
+
+
+
+<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+    Link with href
+</a>
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+    Button with data-bs-target
+</button>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+        </div>
+        <div class="dropdown mt-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                Dropdown button
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="pt-1">
+    <div class="alert alert-primary" role="alert">
+        Hello NguyenDuyKhang
+    </div>
+</div>
+
+
+<div class="dx-viewport">
+    <div id="action-add"></div>
+    <div class="catering_header px-2 row gap-1">
+        <div class="col-md-4 col-sm-12" id="constant"></div>
+        <div class="col-md-4 col-sm-12" id="search-box"></div>
+    </div>
+
+</div>
+
+<!--CATEGORY START-->
+<div class="tabs-custom mt-1 w-100 d-flex flex-wrap gap-1 align-items-center justify-content-start">
+    <a href="?category=all" data-active="all" class="tabs-custom-item active">
+        Tất cả
+    </a>
+    <a href="?category=com" data-active="com" class="tabs-custom-item">
+        Cơm
+    </a>
+    <a href="?category=pho" data-active="pho" class="tabs-custom-item">
+        Phở
+    </a>
+    <a href="?category=hutieu" data-active="hutieu" class="tabs-custom-item">
+        Hủ tiếu
+    </a>
+    <a href="?category=1" data-active="1" class="tabs-custom-item">
+        Đồ chay
+    </a>
+    <a href="?category=2" data-active="2" class="tabs-custom-item">
+        Nước uống
+    </a>
+    <a href="?category=3" data-active="3" class="tabs-custom-item">
+        Tráng miệng
+    </a>
+
+</div>
+<!--CATEGORY END-->
+<!--FOOD CARD START-->
+
+
+<div class="food-list row gap-4 justify-content-md-start justify-content-sm-center m-1 mb-3">
+    <div class="food-card col-lg-3 col-md-5 col-sm-11">
+        <img src="https://images.foody.vn/res/g116/1155652/prof/s640x400/foody-upload-api-foody-mobile-im-6522b18f-221112225428.jpeg" alt="Alternate Text" />
+        <div class="p-2">
+            <div class="food-name">Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng</div>
+            <p class="food-price d-flex align-items-center gap-1"><i class='bx bx-money'></i> 40.000đ</p>
+            <button class="add-food-to-cart">Thêm vào giỏ hàng</button>
+        </div>
+    </div>
+    <div class="food-card col-lg-3 col-md-5  col-sm-11">
+        <img src="https://images.foody.vn/res/g116/1155652/prof/s640x400/foody-upload-api-foody-mobile-im-6522b18f-221112225428.jpeg" alt="Alternate Text" />
+        <div class="p-2">
+            <div class="food-name">Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng</div>
+            <p class="food-price d-flex align-items-center gap-1"><i class='bx bx-money'></i> 40.000đ</p>
+            <button class="add-food-to-cart">Thêm vào giỏ hàng</button>
+        </div>
+    </div>
+    <div class="food-card col-lg-3 col-md-5  col-sm-11">
+        <img src="https://images.foody.vn/res/g116/1155652/prof/s640x400/foody-upload-api-foody-mobile-im-6522b18f-221112225428.jpeg" alt="Alternate Text" />
+        <div class="p-2">
+            <div class="food-name">Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng</div>
+            <p class="food-price d-flex align-items-center gap-1"><i class='bx bx-money'></i> 40.000đ</p>
+            <button class="add-food-to-cart">Thêm vào giỏ hàng</button>
+        </div>
+    </div>
+    <div class="food-card col-lg-3 col-md-5  col-sm-11">
+        <img src="https://images.foody.vn/res/g116/1155652/prof/s640x400/foody-upload-api-foody-mobile-im-6522b18f-221112225428.jpeg" alt="Alternate Text" />
+        <div class="p-2">
+            <div class="food-name">Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng</div>
+            <p class="food-price d-flex align-items-center gap-1"><i class='bx bx-money'></i> 40.000đ</p>
+            <button class="add-food-to-cart">Thêm vào giỏ hàng</button>
+        </div>
+    </div>
+    <div class="food-card col-lg-3 col-md-5  col-sm-11">
+        <img src="https://images.foody.vn/res/g116/1155652/prof/s640x400/foody-upload-api-foody-mobile-im-6522b18f-221112225428.jpeg" alt="Alternate Text" />
+        <div class="p-2">
+            <div class="food-name">Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng Cơm bì chả lạp xưởng</div>
+            <p class="food-price d-flex align-items-center gap-1"><i class='bx bx-money'></i> 40.000đ</p>
+            <button idfood="hardcode" class="add-food-to-cart">Thêm vào giỏ hàng</button>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!--FOOD CARD END-->
+<!--UI SCRIPT-->
+<script>
+
+    const handleActiveTab = () => {
+        const tabs = document.querySelectorAll(".tabs-custom-item");
+        tabs.forEach(tab => tab.classList.remove("active"));
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+
+        if (!category) {
+            return tabs[0].classList.add('active')
+
+        }
+        tabs.forEach(tab => {
+
+            if (tab.getAttribute("data-active") == category) {
+                tab.classList.add("active")
+            }
+
+        });
+    }
+    handleActiveTab()
+
+</script>
+
+<script>
+    $(function () {
+
+
+
+        $('#action-add').dxSpeedDialAction({
+            label: 'Giỏ hàng',
+            icon: 'add',
+            index: 1,
+            onClick() {
+                alert("okekeke")
+                /*   grid.addRow();
+                   grid.deselectAll();*/
+            },
+        }).dxSpeedDialAction('instance');
+
+
+        const date = new Date();
+
+        $('#constant').dxDateBox({
+            showSpinButtons: true,
+            placeholder: date.toString(),
+            showClearButton: true,
+            useMaskBehavior: true,
+            displayFormat: 'dd/MM/yyyy',
+            type: 'date',
+            value: date,
+            inputAttr: { 'aria-label': 'Date' },
+        });
+        const searchBox = $('#search-box').dxTextBox({
+            onEnterKey: function (e) {
+                handleSearch(searchBox.option("value"))
+            },
+
+            placeholder: 'Tìm kiếm...',
+            showClearButton: true,
+            buttons: ["clear", {
+                name: 'search-icon',
+                location: 'after',
+
+                options: {
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(243, 232, 232, 1);transform: ;msFilter:;"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>',
+                    type: 'default',
+
+                    width: 32,
+                    elementAttr: {
+                        class: 'btn-search',
+                    },
+                    onClick() {
+
+                        handleSearch(searchBox.option("value"))
+                    },
+                },
+            },],
+
+            inputAttr: { 'aria-label': 'Text' },
+
+
+        }).dxTextBox('instance');
+
+
+        /*$("#tabs").dxTabs({
+
+            selectedIndex: 2,
+            items: [
+                {
+                    template:`<div class="custom-tab-item">Cơm</div>`
+                },
+                {
+                    badge: 'First',
+
+                },
+                {
+
+                    badge: 'Third'
+                },
+                {
+                    badge: 'First'
+                },
+                {
+
+                    badge: 'Third'
+                },
+                {
+                    badge: 'First'
+                },
+
+            ],
+            onItemClick(e) {
+                showMessage(e.itemIndex + 1);
+            }
+        });*/
+
+        function showMessage(id) {
+            DevExpress.ui.notify(
+                {
+                    message: `Tab ${id} has been clicked!`,
+                    width: 250
+                },
+                'info',
+                500
+            );
+        };
+
+        function handleSearch(searchString) {
+            if (searchString) {
+                alert(searchString)
+            }
+        }
+    })
+
+</script>
+
+
+@*https://demos.devexpress.com/ASPNetMvc/Demo/Common/CustomTextEditorButtons/Mvc/Light/*@
